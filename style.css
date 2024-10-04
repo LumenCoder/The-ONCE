@@ -1,0 +1,190 @@
+/* General styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', monospace; /* A monospaced font for the matrix and typewriter aesthetic */
+}
+
+body, html {
+    height: 100%;
+    overflow: hidden; /* Prevents unwanted scrolling */
+    background-color: black; /* Matrix-style background */
+    color: white;
+}
+
+/* Section 1: Intro Loading Animation */
+#loading-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    position: relative;
+    background-color: black; /* Initial black background */
+}
+
+.matrix-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black; /* Matrix effect will be added later via JavaScript */
+    z-index: 1; /* Ensure it’s behind the text */
+}
+
+.loading-text {
+    position: relative;
+    z-index: 2; /* Ensures the loading text is above the matrix */
+}
+
+.loading-text h1 {
+    font-size: 2rem;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 2s forwards;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Button: Frosted Glass Effect */
+.begin-button-wrapper {
+    position: relative;
+    z-index: 2;
+    margin-top: 20px;
+}
+
+.glass-button {
+    background: rgba(255, 255, 255, 0.2); /* Semi-transparent frosted effect */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    padding: 10px 20px;
+    color: white;
+    font-size: 1.2rem;
+    backdrop-filter: blur(5px); /* Creates the blur */
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.glass-button:hover {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.glass-button:active {
+    animation: glitch 0.2s infinite alternate;
+}
+
+/* Glitch effect on button click */
+@keyframes glitch {
+    0% {
+        transform: translateX(1px) skewY(-2deg);
+    }
+    100% {
+        transform: translateX(-1px) skewY(2deg);
+    }
+}
+
+/* Section 2: Bio Section */
+#bio-section {
+    display: none; /* Initially hidden */
+    position: relative;
+    height: 100vh;
+    text-align: center;
+    background: black;
+    color: white;
+}
+
+.particle-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: black; /* Dynamic particle background will be added with JS later */
+}
+
+.bio-content {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+}
+
+.bio-content h1, .bio-content p {
+    margin: 10px 0;
+    font-size: 1.8rem;
+}
+
+.clickable {
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.clickable:hover {
+    color: #00ff00; /* Green hover effect */
+}
+
+/* Section 3: Social Media Links */
+#social-links-section {
+    display: none; /* Initially hidden */
+    height: 100vh;
+    text-align: center;
+    padding: 50px 20px;
+    background: black;
+}
+
+.social-links-content h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.social-links-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.social-links-content li {
+    margin: 10px 0;
+}
+
+.social-links-content a {
+    color: white;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.social-links-content a:hover {
+    color: #ff0000; /* Red hover effect */
+}
+
+/* Transition effects */
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+    animation: fadeInSection 1s ease;
+}
+
+@keyframes fadeInSection {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Additional animations can be added in JavaScript */
