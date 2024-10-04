@@ -10,11 +10,13 @@ const letters = Array(256).join(1).split('');
 const fontSize = 16;
 const columns = canvas.width / fontSize; // Number of columns for the rain
 
+let matrixColor = '#00FF00'; // Initial matrix color (green)
+
 function drawMatrix() {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // Fading effect
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = '#00FF00'; // Matrix green color
+    ctx.fillStyle = matrixColor; // Matrix color (will change to red)
     ctx.font = `${fontSize}px monospace`;
 
     letters.forEach((y_pos, index) => {
@@ -29,9 +31,19 @@ function drawMatrix() {
 }
 
 // Run the matrix effect at an interval
-setInterval(drawMatrix, 50);
+const matrixInterval = setInterval(drawMatrix, 50);
 
-// Typewriter Effect
+// Function to fade the matrix out and change to red
+function fadeMatrixToRed() {
+    matrixColor = '#FF0000'; // Change matrix color to red
+
+    setTimeout(() => {
+        canvas.style.transition = 'opacity 2s';
+        canvas.style.opacity = '0'; // Fade out matrix
+    }, 1000); // Wait 1 second before fading out
+}
+
+// Typewriter Effect with Matrix Characters Flash
 function typeWriterEffect(element, text, speed = 100) {
     let i = 0;
 
@@ -50,17 +62,23 @@ function typeWriterEffect(element, text, speed = 100) {
     setTimeout(type, speed); // Delay start if needed
 }
 
-// Button Interaction to Show Bio Section
-document.getElementById('begin-btn').addEventListener('click', function () {
-    const loadingScreen = document.getElementById('loading-screen');
-    const bioSection = document.getElementById('bio-section');
+// Transition from Loading Screen to Bio Section after 5 seconds
+setTimeout(() => {
+    // Fade matrix to red and then transition
+    fadeMatrixToRed();
 
-    // Smooth transition to bio section
-    loadingScreen.style.opacity = '0';
     setTimeout(() => {
-        loadingScreen.style.display = 'none';
+        // Hide loading screen and show bio section
+        document.getElementById('loading-screen').style.display = 'none';
+        const bioSection = document.getElementById('bio-section');
         bioSection.style.display = 'block';
-        typeWriterEffect(document.querySelector('.bio-text h1'), "Lumen's Bio");
-        typeWriterEffect(document.querySelector('.bio-text p'), "A fun coder who likes to make projects. He has a YouTube channel and makes edits. Ever since he was 14, he loved to code. He lives in the United States and plans to be a full stack developer.");
-    }, 1000); // Delay to allow fade-out of the loading screen
-});
+        bioSection.style.transition = 'opacity 2s'; // Smooth fade-in for bio
+        bioSection.style.opacity = '1';
+
+        // Start typewriter effect for bio text
+        typeWriterEffect(document.querySelector('.bio-text h1'), "Lumen's Bio", 500);
+        const bioText = "A fun coder who likes to make projects. He has a YouTube channel and makes edits. Ever since he was 14, he loved to code. He lives in the United States and plans to be a full stack developer.";
+        typeWriterEffect(document.querySelector('.bio-text p'), bioText, 1000);
+    }, 2000); // Wait for matrix to fade out before showing bio
+
+}, 5000); // 5 seconds delay before transitioning
