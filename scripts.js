@@ -36,10 +36,12 @@ const matrixInterval = setInterval(drawMatrix, 50);
 // Function to fade the matrix out and change to red
 function fadeMatrixToRed() {
     matrixColor = '#FF0000'; // Change matrix color to red
+    console.log("Matrix color changed to red");
 
     setTimeout(() => {
         canvas.style.transition = 'opacity 2s';
         canvas.style.opacity = '0'; // Fade out matrix
+        console.log("Matrix is fading out");
     }, 1000); // Wait 1 second before fading out
 }
 
@@ -65,6 +67,7 @@ function typeWriterEffect(element, text, speed = 100) {
 // Transition from Loading Screen to Bio Section after 5 seconds
 setTimeout(() => {
     // Fade matrix to red and then transition
+    console.log("Fading matrix to red...");
     fadeMatrixToRed();
 
     setTimeout(() => {
@@ -74,6 +77,7 @@ setTimeout(() => {
         bioSection.style.display = 'block';
         bioSection.style.transition = 'opacity 2s'; // Smooth fade-in for bio
         bioSection.style.opacity = '1';
+        console.log("Bio section is now visible");
 
         // Start typewriter effect for bio text
         typeWriterEffect(document.querySelector('.bio-text h1'), "Lumen's Bio", 500);
