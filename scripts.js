@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const drops = Array(columns).fill(1); // Initialize the matrix "rain"
 
     let matrixColor = "#ffffff"; // Default matrix color
+    let matrixSpeed = 33; // Default matrix speed
     let matrixInterval;
 
     // Function to draw the matrix animation
@@ -38,50 +39,85 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Start matrix animation
-    matrixInterval = setInterval(drawMatrix, 33);
+    function startMatrix(speed = 33) {
+        clearInterval(matrixInterval);
+        matrixInterval = setInterval(drawMatrix, speed);
+    }
+    startMatrix(matrixSpeed); // Start with default speed
 
     // Fade in the loading text after 1 second
     setTimeout(() => {
-        loadingText.style.opacity = "1";
+        loadingText.style.opacity = "1"; // Fades in text
     }, 1000);
 
     // Show the "Begin" button after 5 seconds
     setTimeout(() => {
-        beginButton.style.display = "block";
-        beginButton.style.opacity = "1"; // Fade-in the button
+        beginButton.style.display = "block"; // Show button
+        setTimeout(() => { // Trigger opacity change after display is set to block
+            beginButton.style.opacity = "1"; // Fade-in the button
+        }, 100); // Small delay to ensure button appears correctly
     }, 5000);
 
-    // Handle hover effect on the button (changes matrix color and slows it down)
+    // Gradually change matrix color on hover
     beginButton.addEventListener("mouseover", function () {
-        matrixColor = "#ff0000"; // Change matrix color to red
-        clearInterval(matrixInterval); // Stop current interval
-        matrixInterval = setInterval(drawMatrix, 100); // Slow down matrix effect
+        let currentColor = 255; // Start with white (RGB: 255,255,255)
+        const colorChangeInterval = setInterval(() => {
+            if (currentColor > 0) {
+                currentColor -= 5; // Gradually reduce the color towards red (255,0,0)
+                matrixColor = `rgb(${currentColor},${currentColor},${currentColor})`;
+            } else {
+                clearInterval(colorChangeInterval); // Stop once fully red
+            }
+        }, 50);
+        // Gradually slow down matrix animation speed on hover
+        const speedChangeInterval = setInterval(() => {
+            if (matrixSpeed < 100) {
+                matrixSpeed += 2; // Gradually slow down the matrix
+                startMatrix(matrixSpeed);
+            } else {
+                clearInterval(speedChangeInterval); // Stop once fully slowed down
+            }
+        }, 50);
     });
 
     beginButton.addEventListener("mouseout", function () {
-        matrixColor = "#ffffff"; // Revert matrix color back to white
-        clearInterval(matrixInterval); // Reset interval to normal speed
-        matrixInterval = setInterval(drawMatrix, 33);
+        let currentColor = 0; // Start with red (RGB: 255,0,0)
+        const colorChangeInterval = setInterval(() => {
+            if (currentColor < 255) {
+                currentColor += 5; // Gradually return to white
+                matrixColor = `rgb(${currentColor},${currentColor},${currentColor})`;
+            } else {
+                clearInterval(colorChangeInterval); // Stop once fully white
+            }
+        }, 50);
+        // Gradually restore matrix speed on mouse out
+        const speedChangeInterval = setInterval(() => {
+            if (matrixSpeed > 33) {
+                matrixSpeed -= 2; // Gradually speed up the matrix
+                startMatrix(matrixSpeed);
+            } else {
+                clearInterval(speedChangeInterval); // Stop once back to normal speed
+            }
+        }, 50);
     });
 
     // Handle "Begin" button click
     beginButton.addEventListener("click", function () {
         beginButton.classList.add("glitch");
-
-        matrixColor = "#ff0000"; // Change matrix color to red on click
+        matrixColor = "#ff0000"; // Change matrix color to red instantly on click
 
         setTimeout(() => {
-            beginButton.style.display = "none"; // Hide button after glitch animation
-            loadingText.style.opacity = "0"; // Fade out loading text
+            // Fade out the button, loading text, and matrix
+            beginButton.style.opacity = "0";
+            loadingText.style.opacity = "0";
+            canvas.style.opacity = "0"; // Matrix fades out
 
+            // After the fade-out, transition to the bio section
             setTimeout(() => {
-                loadingSection.style.opacity = "0"; // Fade out the entire loading section
-                setTimeout(() => {
-                    loadingSection.style.display = "none"; // Hide loading section completely
-                    bioSection.classList.remove("hidden");
-                    bioSection.classList.add("visible"); // Show the bio section
-                }, 1000); // Matches fade-out duration for loading section
-            }, 500); // Fade out text first, then matrix and section
-        }, 2000); // Glitch animation duration
+                loadingSection.style.display = "none"; // Hide loading section
+                bioSection.classList.remove("hidden"); // Show the bio section
+                bioSection.classList.add("visible");
+            }, 1000); // Matches fade-out duration
+        }, 2000); // Wait for glitch effect duration before fading out
     });
 });
