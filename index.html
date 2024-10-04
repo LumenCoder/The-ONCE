@@ -3,29 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Lumen's Website</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Matrix loading section -->
-    <section id="loading-section">
-        <canvas class="matrix"></canvas>
+
+    <!-- Section 1: Loading Screen -->
+    <div id="loading-screen">
+        <div class="matrix-background"></div>
         <div class="loading-text">
-            <h1>Now Loading, Lumen’s Website</h1>
+            <p>Now Loading, Lumen’s Website</p>
         </div>
-        <button class="begin-button" id="begin-button">Begin</button>
-    </section>
+        <button id="begin-btn" class="glass-button">Begin</button>
+    </div>
 
-    <!-- Bio section (Hidden initially) -->
-    <section id="bio-section" class="hidden">
-        <div class="bio-content">
+    <!-- Section 2: Bio Section (hidden initially) -->
+    <div id="bio-section" style="display: none;">
+        <div class="bio-text">
             <h1>Lumen's Bio</h1>
-            <p id="bio-text">A fun coder who likes to make projects. He has a YouTube channel and makes edits. Ever since he was 14, he loved to code. He lives in the United States and plans to be a full stack developer.</p>
-            <p id="socials-text" class="social-link">He has socials, make sure to check them out</p>
+            <p>A fun coder who likes to make projects. He has a YouTube channel and makes edits. Ever since he was 14, he loved to code. He lives in the United States and plans to be a full stack developer.</p>
+            <p class="socials-link">He has socials, make sure to check them out</p>
         </div>
-    </section>
+    </div>
 
+    <!-- Section 3: Social Media Links (hidden initially) -->
+    <div id="socials-section" style="display: none;">
+        <div class="social-links">
+            <p>My YouTube Channels</p>
+            <p>My Snapchat</p>
+            <p>My TikTok</p>
+            <p>My Instagram</p>
+            <p>My Github</p>
+        </div>
+    </div>
+
+    <!-- Link to external JavaScript file -->
     <script src="scripts.js"></script>
 </body>
 </html>
