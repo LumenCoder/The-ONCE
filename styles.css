@@ -1,107 +1,154 @@
-/* General styles */
+/* Global styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Courier New', monospace;
-}
-body, html {
-    height: 100%;
-    overflow: hidden;
-    background-color: black;
+    font-family: 'Arial', sans-serif;
     color: white;
 }
 
-/* Loading Section */
-#loading-section {
+body {
+    background-color: black;
+    overflow: hidden; /* Prevent scrolling */
+}
+
+/* Section 1: Loading Screen Styles */
+#loading-screen {
+    position: relative;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    height: 100vh;
-    position: relative;
-    background-color: black;
-    transition: opacity 1s ease;
 }
 
-/* Matrix animation */
-.matrix {
+.matrix-background {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 0;
-    transition: opacity 1s ease;
+    background-color: black;
+    z-index: -1;
+    overflow: hidden;
 }
 
-/* Loading text */
+.matrix-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.1) 0 1px,
+        transparent 1px 100%
+    );
+    background-size: 20px 100px;
+    animation: matrix-animation 4s linear infinite;
+}
+
+@keyframes matrix-animation {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 0 -100vh;
+    }
+}
+
 .loading-text {
-    z-index: 1;
-    opacity: 0; /* Initially hidden */
-    transition: opacity 2s ease; /* Smooth fade in/out */
-}
-
-.loading-text h1 {
-    font-size: 2rem;
+    font-size: 24px;
     text-align: center;
+    animation: fadeIn 2s ease-in-out;
 }
 
-/* Button initially hidden */
-.begin-button {
-    display: none;
-    opacity: 0;
-    z-index: 2;
-    margin-top: 20px;
-    padding: 10px 20px;
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: 12px;
-    backdrop-filter: blur(5px);
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Glass Button Styling */
+.glass-button {
+    background: rgba(255, 255, 255, 0.2); /* Semi-transparent for frosted glass effect */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 15px 30px;
+    margin-top: 30px;
+    font-size: 18px;
     color: white;
-    font-size: 1.2rem;
-    transition: opacity 1s ease, background-color 0.5s ease;
+    backdrop-filter: blur(5px); /* Frosted glass effect */
+    transition: backdrop-filter 0.3s ease, background-color 0.3s ease;
     cursor: pointer;
 }
 
-.begin-button:hover {
-    backdrop-filter: blur(10px);
+.glass-button:hover {
+    backdrop-filter: blur(10px); /* Intensify blur on hover */
+    background-color: rgba(255, 255, 255, 0.3); /* Change background color slightly */
 }
 
-/* Glitch animation for button */
-.begin-button.glitch {
-    animation: glitch 2s;
-}
-
-@keyframes glitch {
-    0% { transform: none; }
-    10% { transform: translate(-2px, -2px); }
-    20% { transform: translate(3px, 3px); }
-    30%, 60% { transform: none; }
-    40% { transform: translate(-5px, 2px); }
-    50% { transform: translate(4px, -3px); }
-    70%, 100% { transform: none; }
-}
-
-/* Bio section */
+/* Section 2: Bio Section Styling */
 #bio-section {
-    display: none;
-    justify-content: center;
-    align-items: center;
     text-align: center;
-    padding: 20px;
-    opacity: 0;
-    transition: opacity 1s ease;
+    padding: 50px;
 }
 
-.visible {
-    display: flex;
-    opacity: 1;
+.bio-text h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    border-right: 2px solid white; /* Simulates a typing cursor */
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+    animation: typewriter 4s steps(40) 1s 1 normal both, cursor-blink 0.75s step-end infinite;
 }
 
-/* Social link text */
-.social-link {
-    text-decoration: underline;
+.bio-text p {
+    font-size: 18px;
+    line-height: 1.5;
+    border-right: 2px solid white;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+    animation: typewriter 6s steps(100) 4s 1 normal both, cursor-blink 0.75s step-end infinite;
+}
+
+@keyframes typewriter {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes cursor-blink {
+    from, to {
+        border-right-color: transparent;
+    }
+    50% {
+        border-right-color: white;
+    }
+}
+
+/* Social Media Links */
+#socials-section {
+    text-align: center;
+    padding: 50px;
+}
+
+.social-links p {
+    font-size: 22px;
+    margin: 10px 0;
     cursor: pointer;
-    margin-top: 20px;
+    transition: color 0.3s ease;
+}
+
+.social-links p:hover {
+    color: #00ff00; /* Hover color effect */
 }
