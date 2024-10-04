@@ -14,11 +14,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const columns = Math.floor(canvas.width / fontSize);
     const drops = Array(columns).fill(1); // Initialize the matrix "rain"
 
+    let matrixColor = "#ffffff"; // Default matrix color
+    let matrixInterval;
+
+    // Function to draw the matrix animation
     function drawMatrix() {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.fillStyle = '#ffffff';
+        ctx.fillStyle = matrixColor; // Apply the matrix color
         ctx.font = fontSize + 'px monospace';
 
         for (let i = 0; i < drops.length; i++) {
@@ -33,7 +37,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    let matrixInterval = setInterval(drawMatrix, 33);
+    // Start matrix animation
+    matrixInterval = setInterval(drawMatrix, 33);
 
     // Fade in the loading text after 1 second
     setTimeout(() => {
@@ -46,20 +51,37 @@ document.addEventListener("DOMContentLoaded", function () {
         beginButton.style.opacity = "1"; // Fade-in the button
     }, 5000);
 
+    // Handle hover effect on the button (changes matrix color and slows it down)
+    beginButton.addEventListener("mouseover", function () {
+        matrixColor = "#ff0000"; // Change matrix color to red
+        clearInterval(matrixInterval); // Stop current interval
+        matrixInterval = setInterval(drawMatrix, 100); // Slow down matrix effect
+    });
+
+    beginButton.addEventListener("mouseout", function () {
+        matrixColor = "#ffffff"; // Revert matrix color back to white
+        clearInterval(matrixInterval); // Reset interval to normal speed
+        matrixInterval = setInterval(drawMatrix, 33);
+    });
+
     // Handle "Begin" button click
     beginButton.addEventListener("click", function () {
         beginButton.classList.add("glitch");
 
+        matrixColor = "#ff0000"; // Change matrix color to red on click
+
         setTimeout(() => {
             beginButton.style.display = "none"; // Hide button after glitch animation
-            loadingSection.style.opacity = "0"; // Fade out matrix and loading text
+            loadingText.style.opacity = "0"; // Fade out loading text
 
-            // After the fade-out transition, show the bio section
             setTimeout(() => {
-                loadingSection.style.display = "none"; // Hide the entire loading section
-                bioSection.classList.remove("hidden");
-                bioSection.classList.add("visible"); // Show the bio section
-            }, 1000); // Matches fade-out duration
+                loadingSection.style.opacity = "0"; // Fade out the entire loading section
+                setTimeout(() => {
+                    loadingSection.style.display = "none"; // Hide loading section completely
+                    bioSection.classList.remove("hidden");
+                    bioSection.classList.add("visible"); // Show the bio section
+                }, 1000); // Matches fade-out duration for loading section
+            }, 500); // Fade out text first, then matrix and section
         }, 2000); // Glitch animation duration
     });
 });
