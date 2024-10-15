@@ -19,6 +19,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: opacity 2s; /* Smooth fade-out */
 }
 
 .matrix-background {
@@ -35,26 +36,14 @@ body {
     display: none;
     text-align: center;
     padding: 50px;
-    position: relative;
-    opacity: 0;
+    opacity: 0; /* Initially hidden for fade-in */
+    transition: opacity 2s; /* Smooth fade-in */
 }
 
-.bio-text h1 {
-    font-size: 36px;
-    margin-bottom: 20px;
-    border-right: 2px solid white;
-    white-space: nowrap;
-    overflow: hidden;
-    display: inline-block;
-}
-
-.bio-text p {
-    font-size: 18px;
-    line-height: 1.5;
-    border-right: 2px solid white;
-    white-space: nowrap;
-    overflow: hidden;
-    display: block;
+.bio-text {
     max-width: 600px;
     margin: 0 auto;
+    line-height: 1.5;
+    text-align: left;
+    white-space: pre-wrap; /* Preserve line breaks */
 }
