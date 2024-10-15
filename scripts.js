@@ -9,13 +9,13 @@ canvas.height = window.innerHeight;
 const letters = Array(256).join(1).split('');
 const fontSize = 16;
 const columns = canvas.width / fontSize;
-let matrixColor = { r: 0, g: 255, b: 0 }; // Start as green
+let matrixColor = { r: 0, g: 255, b: 0 }; // Green during loading
 
 function drawMatrix() {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // Fading effect
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = `rgb(${matrixColor.r}, ${matrixColor.g}, ${matrixColor.b})`; // Matrix color
+    ctx.fillStyle = `rgb(${matrixColor.r}, ${matrixColor.g}, ${matrixColor.b})`;
     ctx.font = `${fontSize}px monospace`;
 
     letters.forEach((y_pos, index) => {
@@ -30,94 +30,64 @@ function drawMatrix() {
 // Run Matrix Animation
 setInterval(drawMatrix, 50);
 
-// Smooth Red Transition
+// Smoothly Transition Matrix to Red
 function smoothTransitionToRed(duration = 2000) {
     let startTime = null;
 
     function step(timestamp) {
         if (!startTime) startTime = timestamp;
         const progress = Math.min((timestamp - startTime) / duration, 1);
-        matrixColor.g = Math.floor(255 * (1 - progress)); // Fade green to 0
-        matrixColor.r = Math.floor(255 * progress); // Fade red to 255
+        matrixColor.g = Math.floor(255 * (1 - progress)); // Green fades out
+        matrixColor.r = Math.floor(255 * progress); // Red fades in
 
-        if (progress < 1) {
-            requestAnimationFrame(step);
-        }
+        if (progress < 1) requestAnimationFrame(step);
     }
 
     requestAnimationFrame(step);
 }
 
-// Typewriter Effect with Full Text Handling
+// Typewriter Effect with Proper Line Breaks
 function typeWriterEffect(element, text, speed = 100) {
     let i = 0;
     function type() {
         if (i < text.length) {
-            element.textContent += String.fromCharCode(0x30A0 + Math.random() * 96);
-            setTimeout(() => {
-                element.textContent = text.slice(0, i + 1);
-                i++;
-                type();
-            }, 50);
+            // Handle line breaks with '\n'
+            if (text[i] === '\n') {
+                element.innerHTML += '<br>'; // Add a new line
+            } else {
+                element.textContent += text[i]; // Add the character
+            }
+            i++;
+            setTimeout(type, speed);
         }
     }
-    setTimeout(type, speed);
-}
-
-// Particle Background for Bio Section
-function initParticles() {
-    const particleCanvas = document.createElement('canvas');
-    const particleCtx = particleCanvas.getContext('2d');
-    document.getElementById('bio-section').appendChild(particleCanvas);
-
-    particleCanvas.width = window.innerWidth;
-    particleCanvas.height = window.innerHeight;
-
-    const particles = Array.from({ length: 100 }, () => ({
-        x: Math.random() * particleCanvas.width,
-        y: Math.random() * particleCanvas.height,
-        size: Math.random() * 3 + 1,
-        speedX: Math.random() * 0.5 - 0.25,
-        speedY: Math.random() * 0.5 - 0.25,
-    }));
-
-    function drawParticles() {
-        particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
-        particleCtx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-
-        particles.forEach(p => {
-            particleCtx.beginPath();
-            particleCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            particleCtx.fill();
-            p.x += p.speedX;
-            p.y += p.speedY;
-
-            if (p.x < 0 || p.x > particleCanvas.width) p.speedX *= -1;
-            if (p.y < 0 || p.y > particleCanvas.height) p.speedY *= -1;
-        });
-
-        requestAnimationFrame(drawParticles);
-    }
-
-    drawParticles();
+    type();
 }
 
 // Transition to Bio Section
 setTimeout(() => {
+    console.log("Starting red transition...");
     smoothTransitionToRed(); // Start red transition
 
     setTimeout(() => {
-        document.getElementById('loading-screen').style.display = 'none'; // Hide loading screen
-        const bioSection = document.getElementById('bio-section');
-        bioSection.style.display = 'block';
-        bioSection.style.opacity = '0';
-        bioSection.style.transition = 'opacity 2s';
+        document.getElementById('loading-screen').style.opacity = '0'; // Fade out loading screen
         setTimeout(() => {
+            document.getElementById('loading-screen').style.display = 'none'; // Hide loading screen
+
+            const bioSection = document.getElementById('bio-section');
+            bioSection.style.display = 'block';
+            bioSection.style.transition = 'opacity 2s';
             bioSection.style.opacity = '1'; // Fade in bio section
-            initParticles(); // Initialize particle background
-            typeWriterEffect(document.querySelector('.bio-text h1'), "Lumen's Bio", 500);
-            const bioText = "A fun coder who likes to make projects. He has a YouTube channel and makes edits. Ever since he was 14, he loved to code. He lives in the United States and plans to be a full stack developer.";
-            typeWriterEffect(document.querySelector('.bio-text p'), bioText, 1000);
-        }, 100); // Slight delay to ensure smooth transition
+
+            // Start typewriter effect for bio text
+            const bioText = 
+                "Lumen's Bio\n" +
+                "A fun coder who likes to make projects.\n" +
+                "He has a YouTube channel and makes edits.\n" +
+                "Ever since he was 14, he loved to code.\n" +
+                "He lives in the United States and plans to be a full stack developer.";
+            typeWriterEffect(document.querySelector('.bio-text'), bioText, 100);
+        }, 1000); // Ensure loading screen is fully hidden before showing bio
     }, 2000); // Wait for red transition to finish
+
 }, 5000); // 5-second loading delay
